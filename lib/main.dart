@@ -23,6 +23,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Health Padi',
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          color: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black54),
+          // textTheme: TextTheme(headline6: TextStyle(color: Colors.black54))
+        ),
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),

@@ -17,7 +17,8 @@ abstract class ScrollListModel<T> extends ChangeNotifier {
 
   fetchItems(Function serverCallback) async {
   if(canLoadMore()){
-      _loadState = Loading();
+      _loadState = Loading(more: currentPage != 1);
+      notifyListeners();
     try {
       ListResponse gottenResponse = await serverCallback();
       List<T> gottenItems = gottenResponse.results.toList();

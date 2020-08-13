@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:healthpadi/providers/scroll_list_model.dart';
 import 'package:healthpadi/utilities/load_state.dart';
 import 'package:stacked/stacked.dart';
@@ -30,19 +31,23 @@ class ScrollListView<T extends ScrollListModel, W> extends StatefulWidget {
 class _ScrollListState<T extends ScrollListModel, W>
     extends State<ScrollListView<T, W>> {
   ScrollController _scrollController;
-  bool canLoadMore = true;
+  // bool canLoadMore = true;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
+
+    if (widget.onLoad != null) {
+      Future.microtask(() => widget.onLoad());
+    }
   }
 
   void _scrollListener() {
-    if (_scrollController.position.extentAfter < 2000 && canLoadMore) {
+    if (_scrollController.position.extentAfter < 2000) {
       widget.onLoad();
-      canLoadMore = false;
+      // canLoadMore = false;
     }
   }
 
@@ -52,7 +57,7 @@ class _ScrollListState<T extends ScrollListModel, W>
         disposeViewModel: false,
         viewModelBuilder: widget.viewModelBuilder,
         onModelReady: (model) {
-          widget.onLoad();
+          // widget.onLoad();
         },
         builder: (context, model, child) {
           LoadState loadState = model.loadState;
@@ -90,7 +95,10 @@ class _ScrollListState<T extends ScrollListModel, W>
 
   _initialProgress() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: SpinKitCubeGrid(
+        color: Theme.of(context).primaryColor,
+        size: 40,
+      ),
     );
   }
 
@@ -154,7 +162,10 @@ class _ScrollListState<T extends ScrollListModel, W>
 
   _buildBottomProgress() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: SpinKitThreeBounce(
+        color: Theme.of(context).primaryColor,
+        size: 30,
+      ),
     );
   }
 }

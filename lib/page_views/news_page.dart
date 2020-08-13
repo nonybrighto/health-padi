@@ -10,11 +10,7 @@ class NewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('news'),),
-      body: ScrollListView<NewsListModel, News>(
-        viewModelBuilder: () => Provider.of<NewsListModel>(context),
-        onLoad: () => Provider.of<NewsListModel>(context).fetchNews(),
-        currentListItemWidget: (news, index) => Text("${news.title}"),
-      ),
+      body: Text(''),
       // body: Text('ssss'),
     );
   }

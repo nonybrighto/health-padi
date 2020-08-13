@@ -1,19 +1,16 @@
-import 'package:healthpadi/models/news.dart';
+import 'package:dio/dio.dart';
 import 'package:healthpadi/models/news_list_response.dart';
+import 'package:healthpadi/utilities/connections.dart';
 
 class NewsRemote {
+  Future<NewsListResponse> fetchNews({int page = 1}) async {
 
-  fetchNews({int page}) async {
-      return NewsListResponse(
-        currentPage: 1,
-        perPage: 10,
-        totalPages: 1,
-        results: [
-          News(id: 1, title: 'hello', source: 'hello'),
-          News(id: 2, title: 'hello2', source: 'hello'),
-          News(id: 3, title: 'hello3', source: 'hello'),
-          News(id: 4, title: 'hello4', source: 'hello')
-        ]
-      );
+    try {
+      Response newsListResponse =
+          await (await baseDio()).get('/news?page=$page');
+      return NewsListResponse.fromJson(newsListResponse.data);
+    } catch (error) {
+      return handleError(error: error, message: 'getting news');
+    }
   }
 }
