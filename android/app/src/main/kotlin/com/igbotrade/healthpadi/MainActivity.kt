@@ -1,4 +1,4 @@
-package com.igbotrade.healthpadi
+package com.nonybrighto.healthpadi
 
 import io.flutter.embedding.android.FlutterActivity
 
