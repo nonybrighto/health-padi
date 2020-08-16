@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:healthpadi/providers/home_model.dart';
 import 'package:healthpadi/widgets/menu_display.dart';
+import 'package:healthpadi/widgets/views/chat_conversation_view.dart';
 import 'package:healthpadi/widgets/views/home_view.dart';
 import 'package:healthpadi/widgets/views/news_view.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<HomePage> {
 
       switch (index) {
         case 0:
-          pageContent = Text('Chat');
+          pageContent = ChatConversationView();
           break;
         case 1:
           pageContent = Text('Locator');

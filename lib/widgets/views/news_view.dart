@@ -6,13 +6,14 @@ import 'package:healthpadi/widgets/views/scroll_list_view.dart';
 import 'package:provider/provider.dart';
 
 class NewsView extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return ScrollListView<NewsListModel, News>(
-        viewModelBuilder: () => Provider.of<NewsListModel>(context),
-        onLoad: () => Provider.of<NewsListModel>(context, listen: false).fetchNews(),
-        currentListItemWidget: (news, index) => NewsCard(news: news),
-      );
+      viewModelBuilder: () => Provider.of<NewsListModel>(context),
+      onLoad: () =>
+          Provider.of<NewsListModel>(context, listen: false).fetchNews(),
+      currentListItemWidget: ({int index, News item, News previousItem}) =>
+          NewsCard(news: item),
+    );
   }
 }

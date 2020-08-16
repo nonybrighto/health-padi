@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "680472808626",
+    "firebase_url": "https://flutter-practice-app-208300.firebaseio.com",
+    "project_id": "flutter-practice-app-208300",
+    "storage_bucket": "flutter-practice-app-208300.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680472808626:android:de493f93d489587d11cdab",
+        "android_client_info": {
+          "package_name": "com.nonybrighto.healthpadi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "680472808626-b0upp1gj29qduj0o23jjjboj8p3aefuo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nonybrighto.healthpadi",
+            "certificate_hash": "cccee93a21464bb31b2d2780cda1c30870e32520"
+          }
+        },
+        {
+          "client_id": "680472808626-9p8mh4f8b01oe1m41vte1dkrrmm1h24f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQIGaXofJ1Wqdo0MedGGrXm6FCPd4mdHQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680472808626-9p8mh4f8b01oe1m41vte1dkrrmm1h24f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

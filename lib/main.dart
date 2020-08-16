@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthpadi/page_views/home_page.dart';
+import 'package:healthpadi/providers/chat_conversation_model.dart';
 import 'package:healthpadi/providers/home_model.dart';
 import 'package:healthpadi/providers/news_list_model.dart';
 import 'package:healthpadi/utilities/locator.dart';
@@ -11,7 +12,8 @@ void main() {
   runApp(MultiProvider(
     providers: [
        ChangeNotifierProvider<HomeModel>(create: (_) => HomeModel()),
-       ChangeNotifierProvider<NewsListModel>(create: (_) => NewsListModel())
+       ChangeNotifierProvider<NewsListModel>(create: (_) => NewsListModel()),
+       ChangeNotifierProvider<ChatConversationModel>(create: (_) => ChatConversationModel())
     ],
     child: MyApp()));
 }

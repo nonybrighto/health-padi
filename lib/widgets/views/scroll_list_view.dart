@@ -8,9 +8,11 @@ enum ScrollListType { grid, list }
 
 class ScrollListView<T extends ScrollListModel, W> extends StatefulWidget {
   final Function onLoad;
-  final Widget Function(W, int) currentListItemWidget;
+  final Widget Function({W item, int index, W previousItem})
+      currentListItemWidget;
   final int gridCrossAxisCount;
   final PageStorageKey pageStorageKey;
+  final ScrollController scrollController;
   final ScrollListType scrollListType;
   final T Function() viewModelBuilder;
 
@@ -22,6 +24,7 @@ class ScrollListView<T extends ScrollListModel, W> extends StatefulWidget {
     this.gridCrossAxisCount,
     this.scrollListType = ScrollListType.list,
     this.pageStorageKey,
+    this.scrollController
   }) : super(key: key);
 
   @override
@@ -36,7 +39,7 @@ class _ScrollListState<T extends ScrollListModel, W>
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+    _scrollController = widget.scrollController ?? ScrollController();
     _scrollController.addListener(_scrollListener);
 
     if (widget.onLoad != null) {
@@ -130,7 +133,10 @@ class _ScrollListState<T extends ScrollListModel, W>
           : listItems.length,
       itemBuilder: (BuildContext context, int index) {
         if (index < listItems.length) {
-          return widget.currentListItemWidget(listItems[index], index);
+          return widget.currentListItemWidget(
+              index: index,
+              item: listItems[index],
+              previousItem: index != 0 ? listItems[index - 1] : null);
         } else if (loadState is Loading) {
           return _buildBottomProgress();
         }
@@ -149,7 +155,10 @@ class _ScrollListState<T extends ScrollListModel, W>
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return widget.currentListItemWidget(listItems[index], index);
+                  return widget.currentListItemWidget(
+                      index: index,
+                      item: listItems[index],
+                      previousItem: index != 0 ? listItems[index - 1] : null);
                 },
                 childCount: listItems.length,
               )),

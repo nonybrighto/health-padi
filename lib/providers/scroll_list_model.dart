@@ -12,7 +12,7 @@ abstract class ScrollListModel<T> extends ChangeNotifier {
 
   String emptyResultMessage = '';
   bool forceLoad = false;
-  bool _hasReachedMax = false;
+  bool hasReachedMax = false;
 
 
   fetchItems(Function serverCallback) async {
@@ -28,11 +28,11 @@ abstract class ScrollListModel<T> extends ChangeNotifier {
       } else {
         _items.addAll(gottenItems);
       }
-      _hasReachedMax = gottenResponse.currentPage == gottenResponse.totalPages;
+      hasReachedMax = gottenResponse.currentPage == gottenResponse.totalPages;
       _loadState = (currentPage == 1 && gottenItems.isEmpty)
           ? LoadedEmpty(emptyResultMessage)
           : Loaded(
-              hasReachedMax: _hasReachedMax
+              hasReachedMax: hasReachedMax
                   );
       currentPage++;
     } catch (error) {
@@ -43,7 +43,21 @@ abstract class ScrollListModel<T> extends ChangeNotifier {
   }
   }
 
+  setLoadState(LoadState loadState){
+    _loadState = loadState;
+    notifyListeners();
+  }
+
+  setHasReachedMax(bool reachedMax){
+    hasReachedMax = reachedMax;
+  }
+
+  setItems(List<T> items){
+    this._items = items;
+    notifyListeners();
+  }
+
   bool canLoadMore(){
-    return _loadState  == null || ((_loadState is Loaded && !_hasReachedMax) && !(loadState is LoadError)) || forceLoad;
+    return _loadState  == null || ((_loadState is Loaded && !hasReachedMax) && !(loadState is LoadError)) || forceLoad;
   }
 }

@@ -43,6 +43,10 @@ dependencies:
   dio: ^3.0.10
   shared_preferences: ^0.5.8
   url_launcher: ^5.5.0
+  cloud_firestore: ^0.13.7
+  device_info: ^0.4.2+6
+  uuid: ^2.2.0
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +65,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icons/menu.svg
+    - assets/avatars/bot.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
