@@ -5,6 +5,7 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:healthpadi/providers/home_model.dart';
 import 'package:healthpadi/widgets/menu_display.dart';
 import 'package:healthpadi/widgets/views/chat_conversation_view.dart';
+import 'package:healthpadi/widgets/views/facts_view.dart';
 import 'package:healthpadi/widgets/views/home_view.dart';
 import 'package:healthpadi/widgets/views/news_view.dart';
 import 'package:provider/provider.dart';
@@ -70,7 +71,7 @@ class _MyHomePageState extends State<HomePage> {
                 TabItem(icon: Icons.home, title: 'Chat'),
                 TabItem(icon: Icons.map, title: 'Locator'),
                 TabItem(icon: Icons.add, title: 'Home'),
-                TabItem(icon: Icons.message, title: 'Survey'),
+                TabItem(icon: Icons.message, title: 'Facts'),
                 TabItem(icon: Icons.people, title: 'News'),
               ],
               initialActiveIndex: 2,
@@ -98,7 +99,7 @@ class _MyHomePageState extends State<HomePage> {
           pageContent = HomeView();
           break;
         case 3:
-          pageContent = Text('Survey');
+          pageContent = FactsView();
           break;
         case 4:
           pageContent = NewsView();
