@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:healthpadi/utilities/list_response.dart';
+import 'package:healthpadi/models/list_response.dart';
 import 'package:healthpadi/utilities/load_state.dart';
 
 abstract class ScrollListModel<T> extends ChangeNotifier {
@@ -55,6 +55,10 @@ abstract class ScrollListModel<T> extends ChangeNotifier {
   setItems(List<T> items){
     this._items = items;
     notifyListeners();
+  }
+
+  appendItems(List<T> items){
+    _items.addAll(items);
   }
 
   bool canLoadMore(){

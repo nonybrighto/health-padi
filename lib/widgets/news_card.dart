@@ -16,7 +16,7 @@ class NewsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     timeago.setLocaleMessages('en', TimeAgoMessages());
     double imageSize = 80;
-    final subTextStyle = Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey[500], fontWeight: FontWeight.normal);
+    final subTextStyle = Theme.of(context).textTheme.subtitle2.copyWith(color: kSubTextColor, fontWeight: FontWeight.normal);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
       child: Column(

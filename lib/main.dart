@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthpadi/page_views/home_page.dart';
 import 'package:healthpadi/providers/chat_conversation_model.dart';
 import 'package:healthpadi/providers/fact_list_model.dart';
+import 'package:healthpadi/providers/place_list_model.dart';
 import 'package:healthpadi/providers/home_model.dart';
 import 'package:healthpadi/providers/news_list_model.dart';
 import 'package:healthpadi/utilities/locator.dart';
@@ -15,7 +16,8 @@ void main() {
        ChangeNotifierProvider<HomeModel>(create: (_) => HomeModel()),
        ChangeNotifierProvider<NewsListModel>(create: (_) => NewsListModel()),
        ChangeNotifierProvider<ChatConversationModel>(create: (_) => ChatConversationModel()),
-       ChangeNotifierProvider<FactListModel>(create: (_) => FactListModel())
+       ChangeNotifierProvider<FactListModel>(create: (_) => FactListModel()),
+       ChangeNotifierProvider<PlaceListModel>(create: (_) => PlaceListModel())
     ],
     child: MyApp()));
 }

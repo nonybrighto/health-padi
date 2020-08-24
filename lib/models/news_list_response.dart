@@ -1,5 +1,5 @@
 import 'package:healthpadi/models/news.dart';
-import 'package:healthpadi/utilities/list_response.dart';
+import 'package:healthpadi/models/list_response.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'news_list_response.g.dart';

@@ -7,6 +7,7 @@ import 'package:healthpadi/widgets/menu_display.dart';
 import 'package:healthpadi/widgets/views/chat_conversation_view.dart';
 import 'package:healthpadi/widgets/views/facts_view.dart';
 import 'package:healthpadi/widgets/views/home_view.dart';
+import 'package:healthpadi/widgets/views/place_view.dart';
 import 'package:healthpadi/widgets/views/news_view.dart';
 import 'package:provider/provider.dart';
 
@@ -93,7 +94,7 @@ class _MyHomePageState extends State<HomePage> {
           pageContent = ChatConversationView();
           break;
         case 1:
-          pageContent = Text('Locator');
+          pageContent = PlaceView();
           break;
         case 2:
           pageContent = HomeView();
