@@ -51,6 +51,7 @@ class PlaceListModel extends ScrollListModel<Place> {
       PlaceType(name: 'Drugstore', value: 'drugstore'),
       PlaceType(name: 'Dentist', value: 'dentist'),
       PlaceType(name: 'Doctor', value: 'doctor'),
+      PlaceType(name: 'Physiotherapist', value: 'physiotherapist'),
     ];
   }
 

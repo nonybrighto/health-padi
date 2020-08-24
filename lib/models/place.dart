@@ -37,7 +37,7 @@ class Place {
 
   getPlaceTypesAsString(){
 
-    List<String> healthTypes  = ['pharmacy', 'doctor', 'drugstore', 'pharmacy', 'hospital', 'dentist'];
+    List<String> healthTypes  = ['pharmacy', 'doctor', 'drugstore', 'pharmacy', 'hospital', 'dentist', 'physiotherapist'];
     final filteredTypes =  this.types.where((type) => healthTypes.contains(type)).toList();
     return filteredTypes.isEmpty ? null : filteredTypes.join(', ');
   }
