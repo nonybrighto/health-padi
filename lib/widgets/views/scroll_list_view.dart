@@ -8,6 +8,7 @@ enum ScrollListType { grid, list }
 
 class ScrollListView<T extends ScrollListModel, W> extends StatefulWidget {
   final Function onLoad;
+  final bool loadOnInit;
   final Widget Function({W item, int index, W previousItem})
       currentListItemWidget;
   final int gridCrossAxisCount;
@@ -20,6 +21,7 @@ class ScrollListView<T extends ScrollListModel, W> extends StatefulWidget {
     Key key,
     this.viewModelBuilder,
     this.onLoad,
+    this.loadOnInit = true,
     this.currentListItemWidget,
     this.gridCrossAxisCount,
     this.scrollListType = ScrollListType.list,
@@ -42,7 +44,7 @@ class _ScrollListState<T extends ScrollListModel, W>
     _scrollController = widget.scrollController ?? ScrollController();
     _scrollController.addListener(_scrollListener);
 
-    if (widget.onLoad != null) {
+    if (widget.onLoad != null && widget.loadOnInit) {
       Future.microtask(() => widget.onLoad());
     }
   }
