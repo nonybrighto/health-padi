@@ -38,12 +38,12 @@ class _MyHomePageState extends State<HomePage> {
       colorTransitionScaffold: Colors.black38,
       offset: IDOffset.only(bottom: 0.05, right: 0.0, left: 0.0),
       scale: IDOffset.horizontal(0.8),
-      proportionalChildArea: true, // default true
+      proportionalChildArea: false,
       borderRadius: 25,
       leftAnimationType: InnerDrawerAnimation.static,
       rightAnimationType: InnerDrawerAnimation.quadratic,
       backgroundDecoration: BoxDecoration(color: Colors.grey[300]),
-      leftChild: MenuDisplay(),
+      leftChild: MenuDisplay(_innerDrawerKey),
       scaffold: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -73,6 +73,7 @@ class _MyHomePageState extends State<HomePage> {
               selector: (_, homeModel) => homeModel.homeIndex),
         ),
         bottomNavigationBar: ConvexAppBar(
+          backgroundColor: Theme.of(context).primaryColor,
           items: [
             TabItem(icon: Icons.home, title: 'Chat'),
             TabItem(icon: Icons.map, title: 'Places'),

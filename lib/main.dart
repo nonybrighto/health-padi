@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.black54),
           // textTheme: TextTheme(headline6: TextStyle(color: Colors.black54))
         ),
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.cyan,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomePage(),

@@ -1,9 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:healthpadi/models/fact.dart';
-import 'package:healthpadi/models/fact_category.dart';
 import 'package:healthpadi/models/news.dart';
-import 'package:healthpadi/page_views/news_page.dart';
 import 'package:healthpadi/providers/home_model.dart';
 import 'package:healthpadi/utilities/constants.dart';
 import 'package:healthpadi/widgets/fact_card.dart';

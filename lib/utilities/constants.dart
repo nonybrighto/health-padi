@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const kAppName = 'Health Padi';
+const kAppVersion = '1.0.0';
 
 const double kDefaultPadding  = 10;
 
