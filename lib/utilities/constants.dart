@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const kAppName = 'Health Padi';
+
 const double kDefaultPadding  = 10;
 
 // Pref keys

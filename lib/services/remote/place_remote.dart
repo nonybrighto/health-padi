@@ -1,7 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:healthpadi/models/geometry.dart';
-import 'package:healthpadi/models/location.dart';
 import 'package:healthpadi/models/place.dart';
 import 'package:healthpadi/models/place_list_response.dart';
 import 'package:healthpadi/utilities/connections.dart';
@@ -28,23 +26,6 @@ class PlaceRemote {
       Response response = await dio.get(
           'https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=$kPlacesApiKey&type=$type$locationQueryString&radius=$radius$nextPageQueryString');
       return PlaceListResponse.fromJson(response.data);
-      // return PlaceListResponse(
-      //   nextPageToken: null,
-      //   results: List.generate(
-      //     20,
-      //     (index) => Place(
-      //       placeId: 'index$index',
-      //       formattedAddress: 'this is my address now',
-      //       name: '$type - index $index',
-      //       rating: (index % 4) + 1.0,
-      //       icon: null,
-      //       geometry: Geometry(
-      //           location: Location(
-      //               lat: 4.8357199 + 0.100 * index,
-      //               lng: 7.044299 + 0.100 * index)),
-      //     ),
-      //   ),
-      // );
     } catch (error) {
       return handleError(error: error, message: 'getting places');
     }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:healthpadi/providers/home_model.dart';
+import 'package:healthpadi/utilities/constants.dart';
 import 'package:healthpadi/widgets/menu_display.dart';
 import 'package:healthpadi/widgets/views/chat_conversation_view.dart';
 import 'package:healthpadi/widgets/views/facts_view.dart';
@@ -31,56 +32,61 @@ class _MyHomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return InnerDrawer(
-        key: _innerDrawerKey,
-        onTapClose: true,
-        swipe: true,
-        colorTransitionScaffold: Colors.black38,
-        offset: IDOffset.only(bottom: 0.05, right: 0.0, left: 0.0),
-        scale: IDOffset.horizontal(0.8),
-        proportionalChildArea: true, // default true
-        borderRadius: 25,
-        leftAnimationType: InnerDrawerAnimation.static,
-        rightAnimationType: InnerDrawerAnimation.quadratic,
-        backgroundDecoration: BoxDecoration(color: Colors.grey[300]),
-        leftChild: MenuDisplay(),
-        scaffold: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              // icon: Icon(Icons.toc, color: Colors.blue),
-              icon: SvgPicture.asset("assets/icons/menu.svg", color: Colors.black54, width: 35,),
-              iconSize: 50,
-              onPressed: _toggle,
+      key: _innerDrawerKey,
+      onTapClose: true,
+      swipe: true,
+      colorTransitionScaffold: Colors.black38,
+      offset: IDOffset.only(bottom: 0.05, right: 0.0, left: 0.0),
+      scale: IDOffset.horizontal(0.8),
+      proportionalChildArea: true, // default true
+      borderRadius: 25,
+      leftAnimationType: InnerDrawerAnimation.static,
+      rightAnimationType: InnerDrawerAnimation.quadratic,
+      backgroundDecoration: BoxDecoration(color: Colors.grey[300]),
+      leftChild: MenuDisplay(),
+      scaffold: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: SvgPicture.asset(
+              "assets/icons/menu.svg",
+              color: Colors.black54,
+              width: 35,
             ),
-            title: Text(
-              'hello',
+            iconSize: 50,
+            onPressed: _toggle,
+          ),
+          title: Selector<HomeModel, String>(
+            builder: (context, title, child) => Text(
+              title,
               style: TextStyle(color: Colors.black54),
             ),
-            backgroundColor: Colors.white,
-            elevation: 0,
-            centerTitle: true,
+            selector: (_, homeModel) => homeModel.title,
           ),
-          body: Scaffold(
-            backgroundColor: Colors.white,
-            body: Consumer<HomeModel>(
-              builder: (context, homeViewModel, child) {
-                return _buildPageContent(homeViewModel.homeIndex);
-                // return Text("${homeViewModel.homeIndex}");
-              },
-            ),
-            bottomNavigationBar: ConvexAppBar(
-              items: [
-                TabItem(icon: Icons.home, title: 'Chat'),
-                TabItem(icon: Icons.map, title: 'Locator'),
-                TabItem(icon: Icons.add, title: 'Home'),
-                TabItem(icon: Icons.message, title: 'Facts'),
-                TabItem(icon: Icons.people, title: 'News'),
-              ],
-              initialActiveIndex: 2,
-              onTap: (int i) => Provider.of<HomeModel>(context, listen: false)
-                  .changeHomeIndex(i),
-            ),
-          ),
-        ));
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+        ),
+        body: Scaffold(
+          backgroundColor: Colors.white,
+          body: Selector<HomeModel, int>(
+              builder: (context, index, child) => _buildPageContent(index),
+              selector: (_, homeModel) => homeModel.homeIndex),
+        ),
+        bottomNavigationBar: ConvexAppBar(
+          items: [
+            TabItem(icon: Icons.home, title: 'Chat'),
+            TabItem(icon: Icons.map, title: 'Places'),
+            TabItem(icon: Icons.add, title: 'Home'),
+            TabItem(icon: Icons.message, title: 'Facts'),
+            TabItem(icon: Icons.people, title: 'News'),
+          ],
+          initialActiveIndex: 2,
+          onTap: (int i) {
+            Provider.of<HomeModel>(context, listen: false).changeHomeIndex(i);
+          },
+        ),
+      ),
+    );
   }
 
   _buildPageContent(int index) {

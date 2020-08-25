@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:healthpadi/providers/scroll_list_model.dart';
 import 'package:healthpadi/utilities/load_state.dart';
+import 'package:healthpadi/widgets/loading_indicator.dart';
 import 'package:stacked/stacked.dart';
 
 enum ScrollListType { grid, list }
@@ -99,12 +100,7 @@ class _ScrollListState<T extends ScrollListModel, W>
   }
 
   _initialProgress() {
-    return Center(
-      child: SpinKitCubeGrid(
-        color: Theme.of(context).primaryColor,
-        size: 40,
-      ),
-    );
+    return LoadingIndicator();
   }
 
   _initialError(String message, {Function onRetry}) {
