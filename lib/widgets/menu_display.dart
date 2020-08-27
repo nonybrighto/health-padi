@@ -19,20 +19,26 @@ class MenuDisplay extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        decoration: BoxDecoration(color: Colors.blueGrey),
+        decoration: BoxDecoration(gradient: LinearGradient(colors: [
+          Theme.of(context).primaryColor,
+          Theme.of(context).primaryColor.withOpacity(0.8),
+          // Color(0XFF5475fe).withOpacity(0.8),
+          // Color(0XFF4a96fb)
+        ],)),
         child: Column(
           children: <Widget>[
             SizedBox(height: 30),
             _buildAppNameHeader(),
-            _buildMenuItem('assets/icons/menu.svg', 'Home', () {
+            SizedBox(height: 70),
+            _buildMenuItem('assets/icons/home.svg', 'Home', () {
               drawerKey.currentState.close();
               Provider.of<HomeModel>(context, listen: false).changeHomeIndex(2);
             }),
-            _buildMenuItem('assets/icons/menu.svg', 'About', () {
+            _buildMenuItem('assets/icons/about.svg', 'About', () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => AboutPage()));
             }),
-            _buildMenuItem('assets/icons/menu.svg', 'Share', () async {
+            _buildMenuItem('assets/icons/share.svg', 'Share', () async {
               final ByteData bytes =
                   await rootBundle.load('assets/images/app_logo.png');
               await Share.file(kAppName, '$kAppName.png',
@@ -40,7 +46,7 @@ class MenuDisplay extends StatelessWidget {
                   text:
                       '''Download $kAppName - $kAppVersion\n---- \n Medical Chatbot \n Health News \n Health Facts & Tips \n Locate Health Centers Easily''');
             }),
-            _buildMenuItem('assets/icons/menu.svg', 'Rate', () {
+            _buildMenuItem('assets/icons/rate.svg', 'Rate', () {
               LaunchReview.launch();
             }),
           ],
@@ -54,15 +60,16 @@ class MenuDisplay extends StatelessWidget {
   }
 
   _buildMenuItem(String iconPath, String title, Function onTap) {
+    Color itemColor = Colors.white.withOpacity(0.8);
     return ListTile(
         leading: SvgPicture.asset(
           iconPath,
-          color: Colors.white,
-          width: 35,
+          color: itemColor,
+          width: 27,
         ),
         title: Text(
           title,
-          style: TextStyle(color: Colors.white54),
+          style: TextStyle(color: itemColor, fontSize: 17, fontWeight: FontWeight.w300),
         ),
         onTap: onTap);
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:healthpadi/models/fact.dart';
 import 'package:healthpadi/models/fact_category.dart';
 
@@ -8,6 +9,8 @@ class FactCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double radiusSize = 10;
+    String assetIconName = fact.type == 'tip' ? 'tip' : 'fact';
+    Color typeColor = Colors.white70;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Card(
@@ -16,7 +19,7 @@ class FactCard extends StatelessWidget {
         ),
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.blueAccent,
+              color: Theme.of(context).primaryColor.withOpacity(0.8),
               borderRadius: BorderRadius.all(Radius.circular(radiusSize))),
           child: Row(
             children: <Widget>[
@@ -26,15 +29,16 @@ class FactCard extends StatelessWidget {
                     width: 50,
                     child: Column(
                       children: <Widget>[
-                        Icon(
-                          Icons.lock,
-                          color: Colors.white,
+                        SvgPicture.asset(
+                          "assets/icons/$assetIconName.svg",
+                          color: typeColor,
+                          width: 23,
                         ),
                         Text(
                           fact.type,
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                              color: typeColor,
+                              fontWeight: FontWeight.w800,
                               fontSize: 10),
                         )
                       ],
@@ -44,7 +48,7 @@ class FactCard extends StatelessWidget {
               ),
               Expanded(
                   child: Container(
-                    padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -70,7 +74,7 @@ class FactCard extends StatelessWidget {
 
   _buildCategoryDisplay(FactCategory category) {
     return Container(
-      margin: EdgeInsets.only(top:3),
+      margin: EdgeInsets.only(top: 3),
       padding: EdgeInsets.all(3),
       color: Colors.grey[300],
       child: Text(category.name),

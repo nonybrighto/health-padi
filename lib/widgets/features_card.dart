@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class FeaturesCard extends StatelessWidget {
   final String title;
-  final String assetIconPath;
+  final String iconName;
   final Function onPressed;
-  FeaturesCard({this.title, this.assetIconPath, this.onPressed});
+  FeaturesCard({this.title, this.iconName, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +25,12 @@ class FeaturesCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SvgPicture.asset(
-                assetIconPath,
-                color: Colors.black54,
-                width: 35,
-              ),
+              // SvgPicture.asset(
+              //   assetIconPath,
+              //   color: Colors.black54,
+              //   width: 35,
+              // ),
+              Image.asset('assets/images/feature/$iconName.png', width: 50, height: 50,),
               Text(
                 title,
                 textAlign: TextAlign.center,

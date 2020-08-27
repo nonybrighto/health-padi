@@ -34,10 +34,17 @@ class _HomeViewState extends State<HomeView> {
       return LoadingIndicator();
     } else if (homeHasError) {
       return Column(
-        children: <Widget>[_buildFeatures(), Expanded(child: ErrorIndicator(errorMessage: 'Failed to load content' , onReload: (){
-           Provider.of<HomeModel>(context, listen: false).getHomeNews();
-           Provider.of<HomeModel>(context, listen: false).getHomeFacts();
-        },))],
+        children: <Widget>[
+          _buildFeatures(),
+          Expanded(
+              child: ErrorIndicator(
+            errorMessage: 'Failed to load content',
+            onRetry: () {
+              Provider.of<HomeModel>(context, listen: false).getHomeNews();
+              Provider.of<HomeModel>(context, listen: false).getHomeFacts();
+            },
+          ))
+        ],
       );
     }
     return SingleChildScrollView(
@@ -77,27 +84,28 @@ class _HomeViewState extends State<HomeView> {
         child: Row(
           children: <Widget>[
             FeaturesCard(
-              title: 'Chat Bot',
-              assetIconPath: 'assets/icons/menu.svg',
-              onPressed: () =>
-                Provider.of<HomeModel>(context, listen: false).changeHomeIndex(0)
-              ),
+                title: 'Chat Bot',
+                iconName: 'chat',
+                onPressed: () => Provider.of<HomeModel>(context, listen: false)
+                    .changeHomeIndex(0)),
             FeaturesCard(
               title: 'Places',
-              assetIconPath: 'assets/icons/menu.svg',
-              onPressed: () => Provider.of<HomeModel>(context, listen: false).changeHomeIndex(1),
+              iconName: 'place',
+              onPressed: () => Provider.of<HomeModel>(context, listen: false)
+                  .changeHomeIndex(1),
             ),
             FeaturesCard(
               title: 'Facts',
-              assetIconPath: 'assets/icons/menu.svg',
-              onPressed: () => Provider.of<HomeModel>(context, listen: false).changeHomeIndex(3),
+              iconName: 'fact',
+              onPressed: () => Provider.of<HomeModel>(context, listen: false)
+                  .changeHomeIndex(3),
             ),
             FeaturesCard(
               title: 'News',
-              assetIconPath: 'assets/icons/menu.svg',
-              onPressed: () => Provider.of<HomeModel>(context, listen: false).changeHomeIndex(4),
+              iconName: 'news',
+              onPressed: () => Provider.of<HomeModel>(context, listen: false)
+                  .changeHomeIndex(4),
             ),
-            
           ],
         ),
       ),

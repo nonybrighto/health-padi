@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:healthpadi/models/chat.dart';
-import 'package:healthpadi/utilities/constants.dart';
 import 'package:healthpadi/utilities/general_utils.dart';
 
 class ChatItem extends StatelessWidget {

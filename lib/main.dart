@@ -32,9 +32,9 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           color: Colors.white,
           iconTheme: IconThemeData(color: Colors.black54),
-          // textTheme: TextTheme(headline6: TextStyle(color: Colors.black54))
         ),
-        primarySwatch: Colors.cyan,
+        primaryColor: Color(0XFF319fe7),
+        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomePage(),

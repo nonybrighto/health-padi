@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:healthpadi/providers/home_model.dart';
-import 'package:healthpadi/utilities/constants.dart';
 import 'package:healthpadi/widgets/menu_display.dart';
 import 'package:healthpadi/widgets/views/chat_conversation_view.dart';
 import 'package:healthpadi/widgets/views/facts_view.dart';
@@ -74,12 +73,13 @@ class _MyHomePageState extends State<HomePage> {
         ),
         bottomNavigationBar: ConvexAppBar(
           backgroundColor: Theme.of(context).primaryColor,
+          color: Colors.white70,
           items: [
-            TabItem(icon: Icons.home, title: 'Chat'),
-            TabItem(icon: Icons.map, title: 'Places'),
-            TabItem(icon: Icons.add, title: 'Home'),
-            TabItem(icon: Icons.message, title: 'Facts'),
-            TabItem(icon: Icons.people, title: 'News'),
+            TabItem(icon: _buildTabIcon("chat"), activeIcon: _buildTabIcon("chat", active: true), title: 'Chat'),
+            TabItem(icon: _buildTabIcon("place"), activeIcon: _buildTabIcon("place", active: true), title: 'Places'),
+            TabItem(icon: _buildTabIcon("home"), activeIcon: _buildTabIcon("home", active: true), title: 'Home'),
+            TabItem(icon: _buildTabIcon("fact"), activeIcon: _buildTabIcon("fact", active: true), title: 'Facts'),
+            TabItem(icon: _buildTabIcon("news"), activeIcon: _buildTabIcon("news", active: true), title: 'News'),
           ],
           initialActiveIndex: 2,
           onTap: (int i) {
@@ -87,6 +87,18 @@ class _MyHomePageState extends State<HomePage> {
           },
         ),
       ),
+    );
+  }
+
+  _buildTabIcon(String assetName, {bool active = false}){
+
+    return Padding(
+      padding: EdgeInsets.all( active? 8.0 : 0),
+      child: SvgPicture.asset(
+                "assets/icons/$assetName.svg",
+                color: active ? Theme.of(context).primaryColor : Colors.white70,
+                width: 20,
+              ),
     );
   }
 
