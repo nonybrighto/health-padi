@@ -59,7 +59,7 @@ class _PlaceDisplayPageState extends State<PlaceDisplayPage>
           endCap: Cap.buttCap));
     }
     return Scaffold(
-        appBar: buildAppBar(title: currentPlace.name),
+        appBar: buildAppBar(context: context, title: currentPlace.name),
         body: ExpandableBottomSheet(
           background: GoogleMap(
             initialCameraPosition: CameraPosition(

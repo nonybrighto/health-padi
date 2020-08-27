@@ -8,6 +8,7 @@ import 'package:healthpadi/page_views/about_page.dart';
 import 'package:healthpadi/providers/home_model.dart';
 import 'package:healthpadi/utilities/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MenuDisplay extends StatelessWidget {
   final GlobalKey<InnerDrawerState> drawerKey;
@@ -19,12 +20,15 @@ class MenuDisplay extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        decoration: BoxDecoration(gradient: LinearGradient(colors: [
-          Theme.of(context).primaryColor,
-          Theme.of(context).primaryColor.withOpacity(0.8),
-          // Color(0XFF5475fe).withOpacity(0.8),
-          // Color(0XFF4a96fb)
-        ],)),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          colors: [
+            Theme.of(context).primaryColor,
+            Theme.of(context).primaryColor.withOpacity(0.8),
+            // Color(0XFF5475fe).withOpacity(0.8),
+            // Color(0XFF4a96fb)
+          ],
+        )),
         child: Column(
           children: <Widget>[
             SizedBox(height: 30),
@@ -37,6 +41,10 @@ class MenuDisplay extends StatelessWidget {
             _buildMenuItem('assets/icons/about.svg', 'About', () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => AboutPage()));
+            }),
+            _buildMenuItem('assets/icons/contact.svg', 'Contact', () {
+              launch(
+                  'mailto:$kContactEmail?subject=Hello&body=$kAppName - $kAppVersion \n Hi.');
             }),
             _buildMenuItem('assets/icons/share.svg', 'Share', () async {
               final ByteData bytes =
@@ -56,7 +64,10 @@ class MenuDisplay extends StatelessWidget {
   }
 
   _buildAppNameHeader() {
-    return Image.asset('assets/images/app_logo_alt.png', height: 40,);
+    return Image.asset(
+      'assets/images/app_logo_alt.png',
+      height: 40,
+    );
   }
 
   _buildMenuItem(String iconPath, String title, Function onTap) {
@@ -69,7 +80,8 @@ class MenuDisplay extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: TextStyle(color: itemColor, fontSize: 17, fontWeight: FontWeight.w300),
+          style: TextStyle(
+              color: itemColor, fontSize: 17, fontWeight: FontWeight.w300),
         ),
         onTap: onTap);
   }

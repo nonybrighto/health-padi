@@ -10,6 +10,7 @@ class AboutPage extends StatelessWidget {
     double itemSpace = 8;
     return Scaffold(
         appBar: buildAppBar(
+          context: context,
           title: 'About',
         ),
         body: SingleChildScrollView(
