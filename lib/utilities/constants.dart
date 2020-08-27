@@ -4,6 +4,7 @@ const kAppName = 'Health Padi';
 const kAppVersion = '1.0.0';
 const String kAppStoreLink =
     'http://play.google.com/store/apps/details?id=com.nonybrighto.healthpadi';
+const String kContactEmail = 'nonybrighto@gmail.com';
 
 const double kDefaultPadding  = 10;
 
