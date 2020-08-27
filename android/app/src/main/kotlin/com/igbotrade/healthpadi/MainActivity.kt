@@ -1,4 +1,4 @@
-package com.nonybrighto.healthpadi
+package com.nonybrighto.health_padi
 
 import io.flutter.embedding.android.FlutterActivity
 
