@@ -40,11 +40,11 @@ class MenuDisplay extends StatelessWidget {
             }),
             _buildMenuItem('assets/icons/share.svg', 'Share', () async {
               final ByteData bytes =
-                  await rootBundle.load('assets/images/app_logo.png');
+                  await rootBundle.load('assets/images/app_icon.png');
               await Share.file(kAppName, '$kAppName.png',
                   bytes.buffer.asUint8List(), 'image/png',
                   text:
-                      '''Download $kAppName - $kAppVersion\n---- \n Medical Chatbot \n Health News \n Health Facts & Tips \n Locate Health Centers Easily''');
+                      '''Download $kAppName - $kAppVersion\n---- \n Medical Chatbot \n Health News \n Health Facts & Tips \n Locate Health Centers Easily\n Download now - $kAppStoreLink''');
             }),
             _buildMenuItem('assets/icons/rate.svg', 'Rate', () {
               LaunchReview.launch();
@@ -56,7 +56,7 @@ class MenuDisplay extends StatelessWidget {
   }
 
   _buildAppNameHeader() {
-    return Text(kAppName);
+    return Image.asset('assets/images/app_logo_alt.png', height: 40,);
   }
 
   _buildMenuItem(String iconPath, String title, Function onTap) {
