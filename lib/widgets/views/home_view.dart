@@ -20,8 +20,11 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    Provider.of<HomeModel>(context, listen: false).getHomeNews();
-    Provider.of<HomeModel>(context, listen: false).getHomeFacts();
+
+    Future.microtask(() {
+      Provider.of<HomeModel>(context, listen: false).getHomeNews();
+      Provider.of<HomeModel>(context, listen: false).getHomeFacts();
+    });
   }
 
   @override
