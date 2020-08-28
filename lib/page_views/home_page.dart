@@ -43,7 +43,8 @@ class _MyHomePageState extends State<HomePage> {
       rightAnimationType: InnerDrawerAnimation.quadratic,
       backgroundDecoration: BoxDecoration(color: Colors.grey[300]),
       leftChild: MenuDisplay(_innerDrawerKey),
-      scaffold: Scaffold(
+      scaffold: Selector<HomeModel, int>(
+              builder: (context, index, child) => Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: SvgPicture.asset(
@@ -67,9 +68,7 @@ class _MyHomePageState extends State<HomePage> {
         ),
         body: Scaffold(
           backgroundColor: Colors.white,
-          body: Selector<HomeModel, int>(
-              builder: (context, index, child) => _buildPageContent(index),
-              selector: (_, homeModel) => homeModel.homeIndex),
+          body: _buildPageContent(index),
         ),
         bottomNavigationBar: ConvexAppBar(
           backgroundColor: Theme.of(context).primaryColor,
@@ -81,12 +80,12 @@ class _MyHomePageState extends State<HomePage> {
             TabItem(icon: _buildTabIcon("fact"), activeIcon: _buildTabIcon("fact", active: true), title: 'Facts'),
             TabItem(icon: _buildTabIcon("news"), activeIcon: _buildTabIcon("news", active: true), title: 'News'),
           ],
-          initialActiveIndex: 2,
+          initialActiveIndex: index,
           onTap: (int i) {
             Provider.of<HomeModel>(context, listen: false).changeHomeIndex(i);
           },
         ),
-      ),
+      ), selector: (_, homeModel) => homeModel.homeIndex)
     );
   }
 
