@@ -1,5 +1,6 @@
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:healthpadi/models/place.dart';
 import 'package:healthpadi/models/place_type.dart';
 import 'package:healthpadi/providers/place_list_model.dart';
@@ -50,23 +51,36 @@ class _PlaceViewState extends State<PlaceView> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(children: [
-        for (PlaceType placeType in placeModel.placeTypes)
-          Padding(
-            padding: const EdgeInsets.all(1),
-            child: ChoiceChip(
-              selected: selectedPlaceType.name == placeType.name,
-              label: Text(placeType.name),
-              onSelected: (selected) {
-                _fetchPlacForType(placeType);
-              },
+      child: AnimationLimiter(
+        child: Row(
+          children: AnimationConfiguration.toStaggeredList(
+            duration: const Duration(milliseconds: 375),
+            childAnimationBuilder: (widget) => SlideAnimation(
+              horizontalOffset: 200.0,
+              child: FadeInAnimation(
+                child: widget,
+              ),
             ),
+            children: [
+              for (PlaceType placeType in placeModel.placeTypes)
+                Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: ChoiceChip(
+                    selected: selectedPlaceType.name == placeType.name,
+                    label: Text(placeType.name),
+                    onSelected: (selected) {
+                      _fetchPlaceForType(placeType);
+                    },
+                  ),
+                ),
+            ],
           ),
-      ]),
+        ),
+      ),
     );
   }
 
-  _fetchPlacForType(PlaceType placeType) {
+  _fetchPlaceForType(PlaceType placeType) {
     PlaceListModel factModel =
         Provider.of<PlaceListModel>(context, listen: false);
     factModel.changeSelectedPlaceType(placeType);

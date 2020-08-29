@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:healthpadi/models/fact.dart';
 import 'package:healthpadi/models/fact_category.dart';
 import 'package:healthpadi/providers/fact_list_model.dart';
@@ -46,7 +47,17 @@ class _FactsViewState extends State<FactsView> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(children: [
+      child: AnimationLimiter(
+        child: Row(
+          children: AnimationConfiguration.toStaggeredList(
+            duration: const Duration(milliseconds: 375),
+            childAnimationBuilder: (widget) => SlideAnimation(
+              horizontalOffset: 200.0,
+              child: FadeInAnimation(
+                child: widget,
+              ),
+            ),
+            children: [
         if (factModel.factCategories != null &&
             factModel.factCategories.isNotEmpty)
           Padding(
@@ -71,8 +82,12 @@ class _FactsViewState extends State<FactsView> {
               },
             ),
           ),
-      ]),
+      ],
+          ),
+        ),
+      ),
     );
+
   }
 
   _fetchCategory(FactCategory category) {
