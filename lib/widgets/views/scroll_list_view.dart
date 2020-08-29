@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:healthpadi/providers/scroll_list_model.dart';
 import 'package:healthpadi/utilities/load_state.dart';
 import 'package:healthpadi/widgets/error_indicator.dart';
@@ -19,17 +20,17 @@ class ScrollListView<T extends ScrollListModel, W> extends StatefulWidget {
   final ScrollListType scrollListType;
   final T Function() viewModelBuilder;
 
-  ScrollListView({
-    Key key,
-    this.viewModelBuilder,
-    this.onLoad,
-    this.loadOnInit = true,
-    this.currentListItemWidget,
-    this.gridCrossAxisCount,
-    this.scrollListType = ScrollListType.list,
-    this.pageStorageKey,
-    this.scrollController
-  }) : super(key: key);
+  ScrollListView(
+      {Key key,
+      this.viewModelBuilder,
+      this.onLoad,
+      this.loadOnInit = true,
+      this.currentListItemWidget,
+      this.gridCrossAxisCount,
+      this.scrollListType = ScrollListType.list,
+      this.pageStorageKey,
+      this.scrollController})
+      : super(key: key);
 
   @override
   _ScrollListState<T, W> createState() => new _ScrollListState<T, W>();
@@ -120,23 +121,35 @@ class _ScrollListState<T extends ScrollListModel, W>
 
   _buildListView(
       LoadState loadState, List<W> listItems, PageStorageKey pageStorageKey) {
-    return ListView.builder(
-      key: pageStorageKey,
-      controller: _scrollController,
-      itemCount: (loadState is Loading) //when loading more
-          ? listItems.length + 1
-          : listItems.length,
-      itemBuilder: (BuildContext context, int index) {
-        if (index < listItems.length) {
-          return widget.currentListItemWidget(
-              index: index,
-              item: listItems[index],
-              previousItem: index != 0 ? listItems[index - 1] : null);
-        } else if (loadState is Loading) {
-          return _buildBottomProgress();
-        }
-        return Container();
-      },
+    return AnimationLimiter(
+      child: ListView.builder(
+        key: pageStorageKey,
+        controller: _scrollController,
+        itemCount: (loadState is Loading) //when loading more
+            ? listItems.length + 1
+            : listItems.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (index < listItems.length) {
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 375),
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(
+                  child: widget.currentListItemWidget(
+                    index: index,
+                    item: listItems[index],
+                    previousItem: index != 0 ? listItems[index - 1] : null,
+                  ),
+                ),
+              ),
+            );
+          } else if (loadState is Loading) {
+            return _buildBottomProgress();
+          }
+          return Container();
+        },
+      ),
     );
   }
 
