@@ -24,6 +24,7 @@ class ChatConversationModel extends ScrollListModel<Chat> {
   Future<Response> sendBotChat(String message) async {
     try {
       _sendLoading = true;
+      notifyListeners();
       final id = Uuid().v4();
       final sessionId = await chatRemote.sendBotMessage(
           id: id, content: message, sessionId: _sessionId);

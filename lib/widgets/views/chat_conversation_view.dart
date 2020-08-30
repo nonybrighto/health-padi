@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthpadi/models/chat.dart';
 import 'package:healthpadi/providers/chat_conversation_model.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:healthpadi/utilities/constants.dart';
 import 'package:healthpadi/utilities/response.dart';
 import 'package:healthpadi/widgets/chat_item.dart';
@@ -36,10 +37,12 @@ class _ChatConversationViewState extends State<ChatConversationView> {
               onLoad: () =>
                   Provider.of<ChatConversationModel>(context, listen: false)
                       .fetchBotChats(onChatAdded: () {
-                _scrollController.animateTo(
-                    _scrollController.position.maxScrollExtent,
-                    duration: Duration(milliseconds: 50),
-                    curve: Curves.easeIn);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _scrollController.animateTo(
+                      _scrollController.position.maxScrollExtent,
+                      duration: Duration(milliseconds: 50),
+                      curve: Curves.easeIn);
+                });
               }),
               currentListItemWidget:
                   ({int index, Chat item, Chat previousItem}) => ChatItem(
@@ -72,20 +75,34 @@ class _ChatConversationViewState extends State<ChatConversationView> {
           ),
           Selector<ChatConversationModel, bool>(
               builder: (context, sendLoading, child) => IconButton(
-                  icon: Icon(
-                    sendLoading ? Icons.lock : Icons.send,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  icon: sendLoading
+                      ? SpinKitThreeBounce(
+                          color: Theme.of(context).primaryColor,
+                          size: 12,
+                        )
+                      : Icon(
+                          Icons.send,
+                          color: Theme.of(context).primaryColor,
+                        ),
                   onPressed: sendLoading
                       ? null
                       : () async {
-                          Response response =
-                              await Provider.of<ChatConversationModel>(context,
-                                      listen: false)
-                                  .sendBotChat(_textEditingController.text);
-                          if (!response.success) {
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text(response.message)));
+                          if (_textEditingController.text.isNotEmpty) {
+                            Response response =
+                                await Provider.of<ChatConversationModel>(
+                                        context,
+                                        listen: false)
+                                    .sendBotChat(_textEditingController.text);
+                            if (!response.success) {
+                              Scaffold.of(context).showSnackBar(
+                                  SnackBar(content: Text(response.message)));
+                            } else {
+                              _textEditingController.text = '';
+                            }
+                          } else {
+                            Scaffold.of(context).showSnackBar(SnackBar(
+                                content:
+                                    Text('Please enter a message to send')));
                           }
                         }),
               selector: (_, chatConversationModel) =>
