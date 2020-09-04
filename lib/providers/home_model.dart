@@ -37,6 +37,7 @@ class HomeModel extends ChangeNotifier {
     try {
       if (_homeNews.isEmpty) {
         _newsLoadState = Loading();
+         notifyListeners();
         final homeNews = await newsRemote.fetchNews(page: 1);
         _homeNews = homeNews.results;
         _newsLoadState = Loaded();
@@ -51,6 +52,7 @@ class HomeModel extends ChangeNotifier {
     try {
       if (_homeFacts.isEmpty) {
         _factsLoadState = Loading();
+         notifyListeners();
         final homeFacts = await factRemote.fetchRandomFacts();
         _homeFacts = homeFacts.results;
         _factsLoadState = Loaded();
