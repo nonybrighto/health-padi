@@ -29,9 +29,9 @@ class MenuDisplay extends StatelessWidget {
             // Color(0XFF4a96fb)
           ],
         )),
-        child: Column(
+        child: ListView(
           children: <Widget>[
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             _buildAppNameHeader(),
             SizedBox(height: 70),
             _buildMenuItem('assets/icons/home.svg', 'Home', () {
