@@ -8,7 +8,6 @@ import 'package:healthpadi/services/remote/chat_remote.dart';
 import 'package:healthpadi/utilities/load_state.dart';
 import 'package:healthpadi/utilities/locator.dart';
 import 'package:healthpadi/utilities/response.dart';
-// import 'package:healthpadi/utilities/response.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatConversationModel extends ScrollListModel<Chat> {
@@ -61,7 +60,7 @@ class ChatConversationModel extends ScrollListModel<Chat> {
               return chat;
             }).toList();
             setLoadState(Loaded(hasReachedMax: true));
-            setItems(chats.reversed.toList());
+            setItems(chats);
             onChatAdded();
           }
         }, onError: (error) {

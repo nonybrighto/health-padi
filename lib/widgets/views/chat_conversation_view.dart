@@ -32,23 +32,25 @@ class _ChatConversationViewState extends State<ChatConversationView> {
           Expanded(
             child: ScrollListView<ChatConversationModel, Chat>(
               scrollController: _scrollController,
+              reverse: true,
               viewModelBuilder: () =>
                   Provider.of<ChatConversationModel>(context),
               onLoad: () =>
                   Provider.of<ChatConversationModel>(context, listen: false)
                       .fetchBotChats(onChatAdded: () {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _scrollController.animateTo(
-                      _scrollController.position.maxScrollExtent,
+                  _scrollController.animateTo(0,
                       duration: Duration(milliseconds: 50),
                       curve: Curves.easeIn);
                 });
               }),
               currentListItemWidget:
-                  ({int index, Chat item, Chat previousItem}) => ChatItem(
+                  ({int index, Chat item, List<Chat> allItems}) => ChatItem(
                 chat: item,
-                showHeaderDate: index == 0 ||
-                    _isNotSameDate(item.createdAt, previousItem.createdAt),
+                showHeaderDate: index == allItems.length - 1 ||
+                    (index != 0 &&
+                        _isNotSameDate(
+                            item.createdAt, allItems[index + 1].createdAt)),
               ),
             ),
           ),

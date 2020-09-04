@@ -37,7 +37,7 @@ class _PlaceViewState extends State<PlaceView> {
             onLoad: () => Provider.of<PlaceListModel>(context, listen: false)
                 .fetchPlaces(),
             currentListItemWidget: (
-                    {int index, Place item, Place previousItem}) =>
+                    {int index, Place item, List<Place> allItems}) =>
                 PlaceCard(place: item),
           ))
         ],

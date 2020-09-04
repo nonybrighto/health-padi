@@ -12,7 +12,7 @@ class NewsView extends StatelessWidget {
       viewModelBuilder: () => Provider.of<NewsListModel>(context),
       onLoad: () =>
           Provider.of<NewsListModel>(context, listen: false).fetchNews(),
-      currentListItemWidget: ({int index, News item, News previousItem}) =>
+      currentListItemWidget: ({int index, News item, List<News> allItems}) =>
           NewsCard(news: item),
     );
   }

@@ -33,7 +33,7 @@ class _FactsViewState extends State<FactsView> {
             onLoad: () =>
                 Provider.of<FactListModel>(context, listen: false).fetchFacts(),
             currentListItemWidget: (
-                    {int index, Fact item, Fact previousItem}) =>
+                    {int index, Fact item, List<Fact> allItems}) =>
                 FactCard(fact: item),
           ))
         ],

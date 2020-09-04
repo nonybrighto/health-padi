@@ -7,18 +7,14 @@ import 'package:healthpadi/widgets/error_indicator.dart';
 import 'package:healthpadi/widgets/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
-enum ScrollListType { grid, list }
-
 class ScrollListView<T extends ScrollListModel, W> extends StatefulWidget {
   final Function onLoad;
   final bool loadOnInit;
-  final Widget Function({W item, int index, W previousItem})
+  final Widget Function({W item, int index, List<W> allItems})
       currentListItemWidget;
-  final int gridCrossAxisCount;
-  final PageStorageKey pageStorageKey;
   final ScrollController scrollController;
-  final ScrollListType scrollListType;
   final T Function() viewModelBuilder;
+  final bool reverse;
 
   ScrollListView(
       {Key key,
@@ -26,9 +22,7 @@ class ScrollListView<T extends ScrollListModel, W> extends StatefulWidget {
       this.onLoad,
       this.loadOnInit = true,
       this.currentListItemWidget,
-      this.gridCrossAxisCount,
-      this.scrollListType = ScrollListType.list,
-      this.pageStorageKey,
+      this.reverse = false,
       this.scrollController})
       : super(key: key);
 
@@ -39,7 +33,6 @@ class ScrollListView<T extends ScrollListModel, W> extends StatefulWidget {
 class _ScrollListState<T extends ScrollListModel, W>
     extends State<ScrollListView<T, W>> {
   ScrollController _scrollController;
-  // bool canLoadMore = true;
 
   @override
   void initState() {
@@ -62,7 +55,8 @@ class _ScrollListState<T extends ScrollListModel, W>
 
   @override
   Widget build(BuildContext context) {
-    LoadState loadState = context.select<T, LoadState>((model) => model.loadState);
+    LoadState loadState =
+        context.select<T, LoadState>((model) => model.loadState);
     List<W> items = context.select<T, List<W>>((model) => model.items);
 
     //if it is the first load
@@ -75,12 +69,7 @@ class _ScrollListState<T extends ScrollListModel, W>
     } else if (loadState is LoadedEmpty) {
       return _showEmpty(loadState.message);
     } else {
-      if (widget.scrollListType == ScrollListType.list) {
-        return _buildListView(loadState, items, widget.pageStorageKey);
-      } else if (widget.scrollListType == ScrollListType.grid) {
-        return _buildGridView(loadState, items);
-      }
-      return Container();
+      return _buildListView(loadState, items);
     }
   }
 
@@ -102,62 +91,37 @@ class _ScrollListState<T extends ScrollListModel, W>
     );
   }
 
-  _buildListView(
-      LoadState loadState, List<W> listItems, PageStorageKey pageStorageKey) {
-    return AnimationLimiter(
-      child: ListView.builder(
-        key: pageStorageKey,
-        controller: _scrollController,
-        itemCount: (loadState is Loading) //when loading more
-            ? listItems.length + 1
-            : listItems.length,
-        itemBuilder: (BuildContext context, int index) {
-          if (index < listItems.length) {
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 375),
-              child: SlideAnimation(
-                verticalOffset: 50.0,
-                child: FadeInAnimation(
-                  child: widget.currentListItemWidget(
-                    index: index,
-                    item: listItems[index],
-                    previousItem: index != 0 ? listItems[index - 1] : null,
+  _buildListView(LoadState loadState, List<W> listItems) {
+    return Column(
+      children: <Widget>[
+        AnimationLimiter(
+          child: Expanded(
+            child: ListView.builder(
+              reverse: widget.reverse,
+              controller: _scrollController,
+              itemCount: listItems.length,
+              itemBuilder: (BuildContext context, int index) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: SlideAnimation(
+                    verticalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: widget.currentListItemWidget(
+                        index: index,
+                        item: listItems[index],
+                        allItems: listItems,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            );
-          } else if (loadState is Loading) {
-            return _buildBottomProgress();
-          }
-          return Container();
-        },
-      ),
-    );
-  }
-
-  _buildGridView(LoadState loadState, List<W> listItems) {
-    return new CustomScrollView(
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: widget.gridCrossAxisCount,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return widget.currentListItemWidget(
-                      index: index,
-                      item: listItems[index],
-                      previousItem: index != 0 ? listItems[index - 1] : null);
-                },
-                childCount: listItems.length,
-              )),
-          SliverToBoxAdapter(
-            child:
-                (loadState is Loading) ? _buildBottomProgress() : Container(),
+                );
+              },
+            ),
           ),
-        ]);
+        ),
+        if (loadState is Loading) _buildBottomProgress()
+      ],
+    );
   }
 
   _buildBottomProgress() {
