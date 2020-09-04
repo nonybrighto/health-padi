@@ -18,7 +18,6 @@ class ChatConversationModel extends ScrollListModel<Chat> {
 
   ChatRemote chatRemote = locator<ChatRemote>();
 
-
   bool get sendLoading => _sendLoading;
 
   Future<Response> sendBotChat(String message) async {
@@ -34,6 +33,7 @@ class ChatConversationModel extends ScrollListModel<Chat> {
       _sendLoading = false;
     } catch (error) {
       _sendLoading = false;
+      notifyListeners();
       return Response(false, error.message);
     }
     notifyListeners();
