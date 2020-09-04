@@ -5,7 +5,7 @@ import 'package:healthpadi/providers/scroll_list_model.dart';
 import 'package:healthpadi/utilities/load_state.dart';
 import 'package:healthpadi/widgets/error_indicator.dart';
 import 'package:healthpadi/widgets/loading_indicator.dart';
-import 'package:stacked/stacked.dart';
+import 'package:provider/provider.dart';
 
 enum ScrollListType { grid, list }
 
@@ -54,51 +54,34 @@ class _ScrollListState<T extends ScrollListModel, W>
 
   void _scrollListener() {
     if (_scrollController.position.extentAfter < 2000) {
-      widget.onLoad();
-      // canLoadMore = false;
+      if (widget.onLoad != null) {
+        widget.onLoad();
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<T>.reactive(
-        disposeViewModel: false,
-        viewModelBuilder: widget.viewModelBuilder,
-        onModelReady: (model) {
-          // widget.onLoad();
-        },
-        builder: (context, model, child) {
-          LoadState loadState = model.loadState;
+    LoadState loadState = context.select<T, LoadState>((model) => model.loadState);
+    List<W> items = context.select<T, List<W>>((model) => model.items);
 
-          List<W> items = model.items;
-
-          //if it is the first load
-          if (loadState is Loading && loadState.more == false ||
-              loadState == null) {
-            return _initialProgress();
-          } else if (loadState is LoadError && loadState.more == false) {
-            return _initialError(loadState.message, onRetry: () {
-              widget.onLoad();
-            });
-          } else if (loadState is LoadedEmpty) {
-            return _showEmpty(loadState.message);
-          } else {
-            if (widget.scrollListType == ScrollListType.list) {
-              return _buildListView(loadState, items, widget.pageStorageKey);
-            } else if (widget.scrollListType == ScrollListType.grid) {
-              return _buildGridView(loadState, items);
-            }
-            //if error occurs while there is already content
-            // if (loadState is LoadError) {
-            //   WidgetsBinding.instance.addPostFrameCallback((_) {
-            //     Scaffold.of(context).showSnackBar(SnackBar(
-            //       content: Text('Error while loading'),
-            //     ));
-            //   });
-            // }
-            return Container();
-          }
-        });
+    //if it is the first load
+    if (loadState is Loading && loadState.more == false || loadState == null) {
+      return _initialProgress();
+    } else if (loadState is LoadError && loadState.more == false) {
+      return _initialError(loadState.message, onRetry: () {
+        widget.onLoad();
+      });
+    } else if (loadState is LoadedEmpty) {
+      return _showEmpty(loadState.message);
+    } else {
+      if (widget.scrollListType == ScrollListType.list) {
+        return _buildListView(loadState, items, widget.pageStorageKey);
+      } else if (widget.scrollListType == ScrollListType.grid) {
+        return _buildGridView(loadState, items);
+      }
+      return Container();
+    }
   }
 
   _initialProgress() {
