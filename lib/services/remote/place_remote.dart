@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:healthpadi/models/place.dart';
 import 'package:healthpadi/models/place_list_response.dart';
 import 'package:healthpadi/utilities/connections.dart';
 import 'package:healthpadi/utilities/secret.dart';
+import 'package:location/location.dart' as loc;
 
 class PlaceRemote {
   Map<String, Place> _placeDetailsCache =
@@ -12,12 +12,12 @@ class PlaceRemote {
   Future<PlaceListResponse> fetchPlaces(
       {String nextPageToken, String type, int radius = 2000}) async {
     try {
-      Position position = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      loc.Location location = loc.Location();
+      final locationData = await location.getLocation();
 
-      String locationQueryString = position == null
+      String locationQueryString = locationData == null
           ? ''
-          : '&location=${position.latitude},${position.longitude}';
+          : '&location=${locationData.latitude},${locationData.longitude}';
       String nextPageQueryString =
           nextPageToken == null ? '' : '&pagetoken=$nextPageToken';
 

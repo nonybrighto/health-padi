@@ -1,4 +1,3 @@
-import 'package:geolocator/geolocator.dart';
 import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:healthpadi/models/location.dart';
@@ -10,12 +9,14 @@ import 'package:healthpadi/services/remote/place_remote.dart';
 import 'package:healthpadi/utilities/load_state.dart';
 import 'package:healthpadi/utilities/locator.dart';
 import 'package:healthpadi/utilities/secret.dart';
+import 'package:location/location.dart' as loc;
+import 'dart:math' show cos, sqrt, asin;
 
 class PlaceListModel extends ScrollListModel<Place> {
   String _nextPageToken;
   List<PlaceType> _placeTypes = [];
   PlaceType _selectedPlaceType;
-  Position _currentPosition;
+  Location _currentPosition;
   Place _currentPlace;
   List<LatLng> _routeCordinates;
   LoadState _placeDetialsLoadState;
@@ -24,7 +25,6 @@ class PlaceListModel extends ScrollListModel<Place> {
 
   List<PlaceType> get placeTypes => _placeTypes;
   PlaceType get selectedPlaceType => _selectedPlaceType;
-  Position get currentPosition => _currentPosition;
   Place get currentPlace => _currentPlace;
   List<LatLng> get routeCordinates => _routeCordinates;
   LoadState get placeDetailsLoadState => _placeDetialsLoadState;
@@ -64,10 +64,6 @@ class PlaceListModel extends ScrollListModel<Place> {
     notifyListeners();
   }
 
-  changeCurrentPlace(Place place) {
-    _currentPlace = place;
-    notifyListeners();
-  }
 
   fetchCurrentPlaceRoute() async {
     _routeCordinates = null;
@@ -77,7 +73,7 @@ class PlaceListModel extends ScrollListModel<Place> {
     List<LatLng> routeCordinates =
         await googleMapPolyline.getCoordinatesWithLocation(
             origin:
-                LatLng(_currentPosition.latitude, _currentPosition.longitude),
+                LatLng(_currentPosition.lat, _currentPosition.lng),
             destination:
                 LatLng(currentPlaceLocation.lat, currentPlaceLocation.lng),
             mode: RouteMode.driving);
@@ -127,33 +123,41 @@ class PlaceListModel extends ScrollListModel<Place> {
     if (_currentPosition == null) {
       return null;
     }
-    return (await Geolocator().distanceBetween(_currentPosition.latitude,
-            _currentPosition.longitude, placeLocation.lat, placeLocation.lng)) /
-        1000;
+    
+
+    return _calculateDistanceInKm(_currentPosition.lat,
+            _currentPosition.lng, placeLocation.lat, placeLocation.lng);
+
   }
 
   getCurrentPosition() async {
-    Position position = _currentPosition ??
-        await Geolocator()
-            .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    position = position ??
-        await Geolocator()
-            .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
-    _currentPosition = position;
-    // notifyListeners();
+    loc.Location location = loc.Location();
+    final locationData = await location.getLocation();
+    _currentPosition = Location(
+        lat: locationData.latitude, lng: locationData.longitude);
   }
 
-  getCurrentPlaceDetails() async {
+  getCurrentPlaceDetails(Place currentPlace) async {
     try {
+      _currentPlace = currentPlace;
       _placeDetialsLoadState = Loading();
-      Place place = await placeRemote.fetchPlaceDetails(_currentPlace.placeId);
-      place.distanceFromLocationInKm =
-          await _getDistanceFromCurrentLocation(place.geometry.location);
-      _currentPlace = place;
+      Place placeWithDetails = await placeRemote.fetchPlaceDetails(_currentPlace.placeId);
+      placeWithDetails.distanceFromLocationInKm =
+          await _getDistanceFromCurrentLocation(placeWithDetails.geometry.location);
+      _currentPlace = placeWithDetails;
       _placeDetialsLoadState = Loaded();
     } catch (error) {
       _placeDetialsLoadState = LoadError(message: 'failed to get place');
     }
     notifyListeners();
+  }
+
+  double _calculateDistanceInKm(lat1, lon1, lat2, lon2){
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+          c(lat1 * p) * c(lat2 * p) * 
+          (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * asin(sqrt(a));
   }
 }

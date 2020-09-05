@@ -1,4 +1,4 @@
-import 'package:android_intent/android_intent.dart';
+// import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:healthpadi/models/place.dart';
@@ -7,7 +7,7 @@ import 'package:healthpadi/providers/place_list_model.dart';
 import 'package:healthpadi/utilities/constants.dart';
 import 'package:healthpadi/widgets/views/scroll_list_view.dart';
 import 'package:healthpadi/widgets/place_card.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 class PlaceView extends StatefulWidget {
@@ -88,16 +88,27 @@ class _PlaceViewState extends State<PlaceView> {
   }
 
   _initializeLocation() async {
-    if (await Permission.location.request().isGranted) {
-      if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-        Provider.of<PlaceListModel>(context, listen: false).fetchPlaces();
-      } else {
-        final AndroidIntent intent = new AndroidIntent(
-          action: 'android.settings.LOCATION_SOURCE_SETTINGS',
-        );
-
-        await intent.launch();
+    Location location = new Location();
+    PermissionStatus permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted == PermissionStatus.granted) {
+       await _checkServiceOn();
       }
+    } else {
+      await _checkServiceOn();
+    }
+  }
+
+  _checkServiceOn() async {
+    Location location = new Location();
+    if (!(await location.serviceEnabled())) {
+      bool enabled = await location.requestService();
+      if (enabled) {
+        Provider.of<PlaceListModel>(context, listen: false).fetchPlaces();
+      }
+    } else {
+      Provider.of<PlaceListModel>(context, listen: false).fetchPlaces();
     }
   }
 }

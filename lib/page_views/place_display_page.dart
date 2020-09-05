@@ -24,15 +24,12 @@ class PlaceDisplayPage extends StatefulWidget {
 class _PlaceDisplayPageState extends State<PlaceDisplayPage>
     with SingleTickerProviderStateMixin {
   Completer<GoogleMapController> _mapController;
-  Place place;
   @override
   void initState() {
     super.initState();
-    place = widget.place;
+
     Provider.of<PlaceListModel>(context, listen: false)
-        .changeCurrentPlace(widget.place);
-    Provider.of<PlaceListModel>(context, listen: false)
-        .getCurrentPlaceDetails();
+        .getCurrentPlaceDetails(widget.place);
     Provider.of<PlaceListModel>(context, listen: false).getCurrentPosition();
     _mapController = Completer();
     Provider.of<PlaceListModel>(context, listen: false)
@@ -65,7 +62,7 @@ class _PlaceDisplayPageState extends State<PlaceDisplayPage>
             initialCameraPosition: CameraPosition(
               target: LatLng(currentPlace.geometry.location.lat,
                   currentPlace.geometry.location.lng),
-              zoom: 12,
+              zoom: 17,
             ),
             polylines: polylines,
             markers: placeListModel.items
