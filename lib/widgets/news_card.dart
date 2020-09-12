@@ -46,7 +46,7 @@ class NewsCard extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(news.host, style: subTextStyle,),
+                              Expanded(child: Text(news.host, style: subTextStyle, overflow: TextOverflow.ellipsis, maxLines: 1,)),
                               Text(timeago.format(news.createdAt.subtract(Duration(minutes: 5))), style: subTextStyle,)
                             ],
                           ),
