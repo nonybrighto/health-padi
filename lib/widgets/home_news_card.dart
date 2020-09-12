@@ -10,7 +10,7 @@ class HomeNewsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-          child: Container(
+      child: Container(
         decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -28,7 +28,9 @@ class HomeNewsCard extends StatelessWidget {
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.3), BlendMode.darken),
-                image: CachedNetworkImageProvider(news.imageUrl),
+                image: news.imageUrl != null
+                    ? CachedNetworkImageProvider(news.imageUrl)
+                    : AssetImage('assets/images/news_placeholder.jpg'),
               )),
           padding: EdgeInsets.all(10),
           child: Stack(
@@ -43,7 +45,10 @@ class HomeNewsCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       news.title,
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
@@ -55,9 +60,11 @@ class HomeNewsCard extends StatelessWidget {
           ),
         ),
       ),
-      onTap: (){
-         Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => NewsDisplayPage(news: news,)));
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => NewsDisplayPage(
+                  news: news,
+                )));
       },
     );
   }
