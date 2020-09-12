@@ -80,7 +80,10 @@ class _ScrollListState<T extends ScrollListModel, W>
   _initialError(String message, {Function onRetry}) {
     return ErrorIndicator(
       errorMessage: message,
-      onRetry: onRetry,
+      onRetry: () {
+        Provider.of<T>(context, listen: false).startForceLoad();
+        onRetry();
+      },
     );
   }
 

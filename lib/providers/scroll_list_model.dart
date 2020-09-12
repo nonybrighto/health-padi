@@ -14,54 +14,58 @@ abstract class ScrollListModel<T> extends ChangeNotifier {
   bool forceLoad = false;
   bool hasReachedMax = false;
 
-
   fetchItems(Function serverCallback) async {
-  if(canLoadMore()){
+    if (canLoadMore()) {
       _loadState = Loading(more: currentPage != 1);
       notifyListeners();
-    try {
-      ListResponse gottenResponse = await serverCallback();
-      List<T> gottenItems = gottenResponse.results.toList();
+      try {
+        ListResponse gottenResponse = await serverCallback();
+        List<T> gottenItems = gottenResponse.results.toList();
 
-      if (currentPage == 1) {
-        _items = gottenItems;
-      } else {
-        _items.addAll(gottenItems);
+        if (currentPage == 1) {
+          _items = gottenItems;
+        } else {
+          _items.addAll(gottenItems);
+        }
+        hasReachedMax = gottenResponse.currentPage == gottenResponse.totalPages;
+        _loadState = (currentPage == 1 && gottenItems.isEmpty)
+            ? LoadedEmpty(emptyResultMessage)
+            : Loaded(hasReachedMax: hasReachedMax);
+        currentPage++;
+      } catch (error) {
+        _loadState = LoadError(message: error.message, more: currentPage > 1);
       }
-      hasReachedMax = gottenResponse.currentPage == gottenResponse.totalPages;
-      _loadState = (currentPage == 1 && gottenItems.isEmpty)
-          ? LoadedEmpty(emptyResultMessage)
-          : Loaded(
-              hasReachedMax: hasReachedMax
-                  );
-      currentPage++;
-    } catch (error) {
-      _loadState = LoadError(message: error.message, more: currentPage > 1);
+      forceLoad = false;
+      notifyListeners();
     }
-    forceLoad = false;
-    notifyListeners();
-  }
   }
 
-  setLoadState(LoadState loadState){
+  setLoadState(LoadState loadState) {
     _loadState = loadState;
     notifyListeners();
   }
 
-  setHasReachedMax(bool reachedMax){
+  setHasReachedMax(bool reachedMax) {
     hasReachedMax = reachedMax;
   }
 
-  setItems(List<T> items){
+  setItems(List<T> items) {
     this._items = items;
     notifyListeners();
   }
 
-  appendItems(List<T> items){
+  appendItems(List<T> items) {
     _items.addAll(items);
   }
 
-  bool canLoadMore(){
-    return _loadState  == null || ((_loadState is Loaded && !hasReachedMax) && !(loadState is LoadError)) || forceLoad;
+  startForceLoad() {
+    forceLoad = true;
+  }
+
+  bool canLoadMore() {
+    return _loadState == null ||
+        ((_loadState is Loaded && !hasReachedMax) &&
+            !(loadState is LoadError)) ||
+        forceLoad;
   }
 }

@@ -3,6 +3,7 @@ import 'package:healthpadi/models/fact.dart';
 import 'package:healthpadi/models/news.dart';
 import 'package:healthpadi/services/remote/fact_remote.dart';
 import 'package:healthpadi/services/remote/news_remote.dart';
+import 'package:healthpadi/services/remote/auth_remote.dart';
 import 'package:healthpadi/utilities/constants.dart';
 import 'package:healthpadi/utilities/load_state.dart';
 import 'package:healthpadi/utilities/locator.dart';
@@ -26,6 +27,11 @@ class HomeModel extends ChangeNotifier {
 
   NewsRemote newsRemote = locator<NewsRemote>();
   FactRemote factRemote = locator<FactRemote>();
+  AuthRemote authRemote = locator<AuthRemote>();
+
+  HomeModel(){
+    _authenticate();
+  }
 
   changeHomeIndex(int index) {
     _homeIndex = index;
@@ -73,5 +79,14 @@ class HomeModel extends ChangeNotifier {
       'Health News'
     ];
     return pageTitles[index];
+  }
+
+  _authenticate() async{
+
+    try{
+        await authRemote.authenticateAnonymously();
+    }catch(_){
+      // log error
+    }
   }
 }

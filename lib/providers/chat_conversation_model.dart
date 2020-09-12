@@ -5,6 +5,7 @@ import 'package:device_info/device_info.dart';
 import 'package:healthpadi/models/chat.dart';
 import 'package:healthpadi/providers/scroll_list_model.dart';
 import 'package:healthpadi/services/remote/chat_remote.dart';
+import 'package:healthpadi/services/remote/auth_remote.dart';
 import 'package:healthpadi/utilities/load_state.dart';
 import 'package:healthpadi/utilities/locator.dart';
 import 'package:healthpadi/utilities/response.dart';
@@ -15,16 +16,17 @@ class ChatConversationModel extends ScrollListModel<Chat> {
   StreamSubscription<QuerySnapshot> _chatSubscription;
   bool _sendLoading = false;
 
-  ChatRemote chatRemote = locator<ChatRemote>();
-
   bool get sendLoading => _sendLoading;
+
+  ChatRemote _chatRemote = locator<ChatRemote>();
+  AuthRemote _authRemote = locator<AuthRemote>();
 
   Future<Response> sendBotChat(String message) async {
     try {
       _sendLoading = true;
       notifyListeners();
       final id = Uuid().v4();
-      final sessionId = await chatRemote.sendBotMessage(
+      final sessionId = await _chatRemote.sendBotMessage(
           id: id, content: message, sessionId: _sessionId);
       if (_sessionId == null) {
         _sessionId = sessionId;
@@ -43,29 +45,32 @@ class ChatConversationModel extends ScrollListModel<Chat> {
     if (canLoadMore()) {
       try {
         this.setLoadState(Loading());
-        setHasReachedMax(true);
-        AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
-        _chatSubscription = Firestore.instance
-            .collection('bot_chats')
-            .where('deviceIdentifier', isEqualTo: androidInfo.androidId)
-            .orderBy('createdAt', descending: true)
-            .limit(70)
-            .snapshots()
-            .listen((messageSnapshot) {
-          if (messageSnapshot.documents.isEmpty) {
-            this.setLoadState(LoadedEmpty('Start a conversation'));
-          } else {
-            List<Chat> chats = messageSnapshot.documents.map((document) {
-              Chat chat = Chat.fromJson(document.data);
-              return chat;
-            }).toList();
-            setLoadState(Loaded(hasReachedMax: true));
-            setItems(chats);
-            onChatAdded();
-          }
-        }, onError: (error) {
-          setLoadState(LoadError(message: 'Could not fetch chats'));
-        });
+        if (await _authRemote.getUser() != null ||
+            await _authRemote.authenticateAnonymously() != null) {
+          setHasReachedMax(true);
+          AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
+          _chatSubscription = Firestore.instance
+              .collection('bot_chats')
+              .where('deviceIdentifier', isEqualTo: androidInfo.androidId)
+              .orderBy('createdAt', descending: true)
+              .limit(70)
+              .snapshots()
+              .listen((messageSnapshot) {
+            if (messageSnapshot.documents.isEmpty) {
+              this.setLoadState(LoadedEmpty('Start a conversation'));
+            } else {
+              List<Chat> chats = messageSnapshot.documents.map((document) {
+                Chat chat = Chat.fromJson(document.data);
+                return chat;
+              }).toList();
+              setLoadState(Loaded(hasReachedMax: true));
+              setItems(chats);
+              onChatAdded();
+            }
+          }, onError: (error) {
+            setLoadState(LoadError(message: 'Could not fetch chats'));
+          });
+        }
       } catch (error) {
         setLoadState(LoadError(
             message: error?.message != null
