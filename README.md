@@ -15,17 +15,12 @@ Health Padi(Friend) is a kit for users that makes it easier for users to maintai
 
 ### Home & Info
 
-<img src="screenshots/home.png" width="270"/>
-<img src="screenshots/extra.png" width="270"/>
-<img src="screenshots/about.png" width="270"/>
+<img src="screenshots/home.png" width="270"/> <img src="screenshots/extra.png" width="270"/> <img src="screenshots/about.png" width="270"/>
 
 ### Places
 
-<img src="screenshots/health_places1.png" width="270"/>
-<img src="screenshots/health_places2.png" width="270"/>
-<img src="screenshots/health_places3.png" width="270"/>
+<img src="screenshots/health_places1.png" width="270"/> <img src="screenshots/health_places2.png" width="270"/> <img src="screenshots/health_places3.png" width="270"/>
 
 ### Facts/Tips & News
 
-<img src="screenshots/facts.png" width="270"/>
-<img src="screenshots/news.png" width="270"/>
+<img src="screenshots/facts.png" width="270"/> <img src="screenshots/news.png" width="270"/>
