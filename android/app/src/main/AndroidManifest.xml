@@ -13,7 +13,7 @@
         android:label="healthpadi"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyB4kHqIkwK1FPKXhaIOaCE6E2L4gSJGkr4"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/googleApiKey"/>
 
         <activity
             android:name=".MainActivity"

@@ -44,3 +44,4 @@ app.*.map.json
 lib/utilities/secret.dart
 android/app/google-services.json
 android/key.properties
+android/app/src/main/res/values/api-keys.xml
