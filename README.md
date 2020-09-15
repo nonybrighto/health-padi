@@ -1,16 +1,31 @@
 # healthpadi
 
-A new Flutter project.
+Health Padi(Friend) is a kit for users that makes it easier for users to maintain a healthy life. Health Padi aims at aiding diagnostics and keeping users well informed on health related Issues around them.
 
-## Getting Started
+[![play_badge](screenshots/badge.png)](https://play.google.com/store/apps/details?id=com.nonybrighto.health_padi)
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- Health News around the world (IBM Discovery)
+- Locate Health places around you - Google places/maps API
+- Health Facts and Tips
+- Diagnostic/Informative Chatbot - Dialogflow (In Progress)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Screenshots
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Home & Info
+
+<img src="screenshots/home.png" width="270"/>
+<img src="screenshots/extra.png" width="270"/>
+<img src="screenshots/about.png" width="270"/>
+
+### Places
+
+<img src="screenshots/health_places1.png" width="270"/>
+<img src="screenshots/health_places2.png" width="270"/>
+<img src="screenshots/health_places3.png" width="270"/>
+
+### Facts/Tips & News
+
+<img src="screenshots/facts.png" width="270"/>
+<img src="screenshots/news.png" width="270"/>
